@@ -46,7 +46,7 @@ function clearBoard() {
   )
 
   simpleGrid.forEach((row) => {
-    simpleRow.forEach((coords) => {
+    row.forEach((coords) => {
       coords = '';
     }
     )
@@ -57,7 +57,33 @@ function clearBoard() {
 }
 
 function checkWinner() {
-
+  // diagonals
+  if (simpleGrid[0][0] === simpleGrid[1][1] && simpleGrid[0][0] === simpleGrid[2][2] && simpleGrid[0][0] !== '') {
+    console.log(simpleGrid[0][0] + ' wins!');
+  }
+  if (simpleGrid[0][2] === simpleGrid[1][1] && simpleGrid[0][2] === simpleGrid[2][0] && simpleGrid[0][2] !== '') {
+    console.log(simpleGrid[0][2] + ' wins!');
+  }
+  // rows
+  if (simpleGrid[0][0] === simpleGrid[0][1] && simpleGrid[0][0] === simpleGrid[0][2] && simpleGrid[0][0] !== '') {
+    console.log(simpleGrid[0][0] + ' wins!');
+  }
+  if (simpleGrid[1][0] === simpleGrid[1][1] && simpleGrid[1][0] === simpleGrid[1][2] && simpleGrid[1][0] !== '') {
+    console.log(simpleGrid[1][0] + ' wins!');
+  }
+  if (simpleGrid[2][0] === simpleGrid[2][1] && simpleGrid[2][0] === simpleGrid[2][2]  && simpleGrid[2][0] !== '') {
+    console.log(simpleGrid[2][0] + ' wins!');
+  }
+  // columns
+  if (simpleGrid[0][0] === simpleGrid[1][0] && simpleGrid[0][0] === simpleGrid[2][0] && simpleGrid[0][0] !== '') {
+    console.log(simpleGrid[0][0] + ' wins!');
+  }
+  if (simpleGrid[0][1] === simpleGrid[1][1] && simpleGrid[0][1] === simpleGrid[2][1] && simpleGrid[0][1] !== '') {
+    console.log(simpleGrid[0][1] + ' wins!');
+  }
+  if (simpleGrid[0][2] === simpleGrid[1][2] && simpleGrid[0][2] === simpleGrid[2][2] && simpleGrid[0][2] !== '') {
+    console.log(simpleGrid[0][2] + ' wins!');
+  }
 }
 
 function mark(loc,row,col) {
@@ -73,5 +99,6 @@ function mark(loc,row,col) {
     }
     console.log(loc.id);
     console.log(simpleGrid);
+    checkWinner();
   }
 }
