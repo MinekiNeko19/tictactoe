@@ -5,6 +5,7 @@ const markcycle = [xsvg, osvg];
 let xturn = true;
 let xwins = 0;
 let owins = 0;
+let gameOver = false;
 
 // setup
 const grid = [];
@@ -29,7 +30,7 @@ grid.forEach((row) => {
   row.forEach((coords) => {
     const r = coords.id.toString().charAt(0);
     const c = coords.id.toString().charAt(1);
-    coords.addEventListener('click', () => { mark(coords,r,c) });
+    coords.addEventListener('click', () => { mark(coords, r, c) });
   }
   )
 }
@@ -45,13 +46,17 @@ function clearBoard() {
   }
   )
 
-  simpleGrid.forEach((row) => {
-    row.forEach((coords) => {
-      coords = '';
+  simpleGrid = [];
+  for (let i = 0; i < 3; i++) {
+    const row = [];
+    for (let j = 0; j < 3; j++) {
+      row.push('');
     }
-    )
+    simpleGrid.push(row);
   }
-  )
+
+  announceEnd();
+  gameOver = false;
 
   console.log(simpleGrid);
 }
@@ -60,42 +65,89 @@ function checkWinner() {
   // diagonals
   if (simpleGrid[0][0] === simpleGrid[1][1] && simpleGrid[0][0] === simpleGrid[2][2] && simpleGrid[0][0] !== '') {
     console.log(simpleGrid[0][0] + ' wins!');
+    announceEnd(simpleGrid[0][0]);
   }
-  if (simpleGrid[0][2] === simpleGrid[1][1] && simpleGrid[0][2] === simpleGrid[2][0] && simpleGrid[0][2] !== '') {
+  else if (simpleGrid[0][2] === simpleGrid[1][1] && simpleGrid[0][2] === simpleGrid[2][0] && simpleGrid[0][2] !== '') {
     console.log(simpleGrid[0][2] + ' wins!');
+    announceEnd(simpleGrid[0][2]);
   }
   // rows
-  if (simpleGrid[0][0] === simpleGrid[0][1] && simpleGrid[0][0] === simpleGrid[0][2] && simpleGrid[0][0] !== '') {
+  else if (simpleGrid[0][0] === simpleGrid[0][1] && simpleGrid[0][0] === simpleGrid[0][2] && simpleGrid[0][0] !== '') {
     console.log(simpleGrid[0][0] + ' wins!');
+    announceEnd(simpleGrid[0][0]);
   }
-  if (simpleGrid[1][0] === simpleGrid[1][1] && simpleGrid[1][0] === simpleGrid[1][2] && simpleGrid[1][0] !== '') {
+  else if (simpleGrid[1][0] === simpleGrid[1][1] && simpleGrid[1][0] === simpleGrid[1][2] && simpleGrid[1][0] !== '') {
     console.log(simpleGrid[1][0] + ' wins!');
+    announceEnd(simpleGrid[1][0]);
   }
-  if (simpleGrid[2][0] === simpleGrid[2][1] && simpleGrid[2][0] === simpleGrid[2][2]  && simpleGrid[2][0] !== '') {
+  else if (simpleGrid[2][0] === simpleGrid[2][1] && simpleGrid[2][0] === simpleGrid[2][2] && simpleGrid[2][0] !== '') {
     console.log(simpleGrid[2][0] + ' wins!');
+    announceEnd(simpleGrid[2][0]);
   }
   // columns
-  if (simpleGrid[0][0] === simpleGrid[1][0] && simpleGrid[0][0] === simpleGrid[2][0] && simpleGrid[0][0] !== '') {
+  else if (simpleGrid[0][0] === simpleGrid[1][0] && simpleGrid[0][0] === simpleGrid[2][0] && simpleGrid[0][0] !== '') {
     console.log(simpleGrid[0][0] + ' wins!');
+    announceEnd(simpleGrid[0][0]);
   }
-  if (simpleGrid[0][1] === simpleGrid[1][1] && simpleGrid[0][1] === simpleGrid[2][1] && simpleGrid[0][1] !== '') {
+  else if (simpleGrid[0][1] === simpleGrid[1][1] && simpleGrid[0][1] === simpleGrid[2][1] && simpleGrid[0][1] !== '') {
     console.log(simpleGrid[0][1] + ' wins!');
+    announceEnd(simpleGrid[0][1]);
   }
-  if (simpleGrid[0][2] === simpleGrid[1][2] && simpleGrid[0][2] === simpleGrid[2][2] && simpleGrid[0][2] !== '') {
+  else if (simpleGrid[0][2] === simpleGrid[1][2] && simpleGrid[0][2] === simpleGrid[2][2] && simpleGrid[0][2] !== '') {
     console.log(simpleGrid[0][2] + ' wins!');
+    announceEnd(simpleGrid[0][2]);
+  }
+  // draw
+  else {
+    let full = true;
+    simpleGrid.forEach((row) => {
+      row.forEach((c) => {
+        if (full) {
+          full = c !== '';
+        }
+      })
+    })
+
+    if (full) {
+      console.log('Draw!');
+      announceEnd('draw');
+    }
   }
 }
 
-function mark(loc,row,col) {
+function announceEnd(winner) {
+  const h3 = document.getElementById('outcome');
+  if (winner === 'draw') {
+    h3.innerHTML = 'Draw!';
+    gameOver = true;
+  }
+  else if (winner === 'x') {
+    h3.innerHTML = 'X wins!';
+    gameOver = true;
+  }
+  else if (winner === 'o') {
+    h3.innerHTML = 'O wins!';
+    gameOver = true;
+  }
+  else {
+    h3.innerHTML = '';
+  }
+}
+
+function mark(loc, row, col) {
+  if (gameOver) {
+    clearBoard();
+  }
+
   if (loc.innerHTML === '') {
     if (xturn) {
       loc.innerHTML = xsvg;
       xturn = false;
-      simpleGrid[row-1][col-1] = 'x';
+      simpleGrid[row - 1][col - 1] = 'x';
     } else {
       loc.innerHTML = osvg;
       xturn = true;
-      simpleGrid[row-1][col-1] = 'o';
+      simpleGrid[row - 1][col - 1] = 'o';
     }
     console.log(loc.id);
     console.log(simpleGrid);
